@@ -1,5 +1,9 @@
 #include "PGM.h"
 
+PGM::PGM(const char* filename):Image(filename)
+{
+}
+
 Image* PGM::clone() const
 {
 	return new PGM(*this);

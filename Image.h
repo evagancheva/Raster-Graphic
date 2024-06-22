@@ -34,5 +34,6 @@ public:
 
 	int getRows()const;
 	int getColls()const;
+	const MyString& getFileName()const;
 };
 

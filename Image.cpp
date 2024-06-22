@@ -14,3 +14,8 @@ int Image::getColls() const
 {
 	return colls;
 }
+
+const MyString& Image::getFileName() const
+{
+	return filename;
+}

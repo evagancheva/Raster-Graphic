@@ -9,6 +9,7 @@ class PGM : public Image {
 	Vector<unsigned char> data;
 
 public:
+	PGM(const char* filename);
 	PGM(void) = default;
 	Image* clone() const;
 	void load(const char* filename) override;

@@ -97,6 +97,10 @@ bool PPM::isGrayscaled()const {
 	return true;
 }
 
+PPM::PPM(const char* filename):Image(filename)
+{
+}
+
 
 void PPM::makeNegative()
 {
