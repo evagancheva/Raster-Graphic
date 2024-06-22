@@ -30,5 +30,8 @@ public:
 	
 	virtual void rotateLeft() = 0;
 	virtual void rotateRight() = 0;
+
+	int getRows()const;
+	int getColls()const;
 };
 

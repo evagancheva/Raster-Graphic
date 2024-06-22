@@ -12,6 +12,7 @@ class Vector
     size_t size;
     size_t capacity;
 
+
     void free();
     void copyFrom(const Vector<T>& other);
     void moveFrom(Vector<T>&& other);
@@ -19,6 +20,7 @@ class Vector
 
 public:
     Vector();
+    Vector(size_t newSize);
     Vector(const Vector<T>& other);
     Vector(Vector<T>&& other);
 
@@ -45,7 +47,12 @@ public:
 
     ~Vector();
 };
-
+template <typename T>
+Vector<T>::Vector(size_t newSize) : size(0)
+{
+    this->capacity = newSize*2;
+    this->data = new T[this->capacity];
+}
 template <typename T>
 void Vector<T>::free()
 {
@@ -140,7 +147,7 @@ void Vector<T>::pushBack(const T& element)
 {
     if (size == capacity)
     {
-        resize(capacity * 2);
+        resize(capacity > 0 ? capacity * 2 : 1);
     }
 
     data[size++] = element;
@@ -151,7 +158,7 @@ void Vector<T>::pushBack(T&& element)
 {
     if (size == capacity)
     {
-        resize(capacity * 2);
+        resize(capacity > 0 ? capacity * 2 : 1);
     }
 
     data[size++] = std::move(element);

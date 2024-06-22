@@ -27,8 +27,7 @@ public:
 
 	void makeHorizontalCollage(const char* imageOne, const char* imageTwo, const char* collageName);
 	void makeVerticalCollage(const char* imageOne, const char* imageTwo, const char* collageName);
-	
+
 	void rotateLeft() override;
 	void rotateRight()override;
 };
-

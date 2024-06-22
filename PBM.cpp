@@ -1,11 +1,11 @@
 #include "PBM.h"
-PBM::PBM(const char* fileName):  Image(fileName)
+PBM::PBM(const char* fileName) : Image(fileName)
 {
-	
+
 }
 
 PBM::PBM(const char* fileName, size_t rows, const std::size_t colls)
-	: Image(fileName,rows, colls) {}
+	: Image(fileName, rows, colls) {}
 
 PBM::PBM(const PBM& other)
 	: Image(other) {}
@@ -19,7 +19,7 @@ void PBM::load(const char* fileName)
 	}
 
 	char buff[3];
-	int _colls,_rows;
+	int _colls, _rows;
 
 	ifs >> buff;
 	ifs >> _colls >> _rows;
@@ -27,7 +27,7 @@ void PBM::load(const char* fileName)
 	magicNumber = buff;
 	colls = _colls;
 	rows = _rows;
-	colorMax=1;
+	colorMax = 1;
 
 	data.clear();
 
@@ -78,12 +78,12 @@ void PBM::saveAs(const char* filename)
 
 void PBM::makeMonochrome()
 {
-    return;
+	return;
 }
 
 void PBM::makeNegative()
 {
-	for (int i = 0; i < rows*colls; i++) {
+	for (int i = 0; i < rows * colls; i++) {
 		int temp = data[i];
 		data[i] = 1 - temp;
 	}
@@ -91,7 +91,7 @@ void PBM::makeNegative()
 
 void PBM::grayscale()
 {
-    return;
+	return;
 }
 void PBM::makeHorizontalCollage(const char* imageOne, const char* imageTwo, const char* collageName) {
 	filename = collageName;
@@ -101,7 +101,7 @@ void PBM::makeHorizontalCollage(const char* imageOne, const char* imageTwo, cons
 		throw std::runtime_error("fail to open fail");
 	}
 	std::ifstream ifs2(imageTwo, std::ios::in);
-	if (!ifs2.is_open()) { 
+	if (!ifs2.is_open()) {
 		throw std::runtime_error("fail to open fail");
 	}
 	char buff1[3];
@@ -110,7 +110,7 @@ void PBM::makeHorizontalCollage(const char* imageOne, const char* imageTwo, cons
 
 	ifs1 >> buff1;
 	ifs1 >> colls1 >> rows1;
-	ifs1>> colorMax1;
+	ifs1 >> colorMax1;
 
 	ifs2 >> buff2;
 	ifs2 >> colls2 >> rows2;
@@ -150,7 +150,7 @@ void PBM::makeHorizontalCollage(const char* imageOne, const char* imageTwo, cons
 }
 void PBM::makeVerticalCollage(const char* imageOne, const char* imageTwo, const char* collageName) {
 	filename = collageName;
-	
+
 	std::ifstream ifs1(imageOne, std::ios::in);
 	if (!ifs1.is_open()) {
 		throw std::runtime_error("fail to open fail");
@@ -175,7 +175,7 @@ void PBM::makeVerticalCollage(const char* imageOne, const char* imageTwo, const 
 	rows = rows1 + rows2;
 	if (colls1 > colls2)
 		colls = colls1;
-	else 
+	else
 		colls = colls2;
 
 	colorMax = colorMax1;
@@ -198,21 +198,11 @@ void PBM::makeVerticalCollage(const char* imageOne, const char* imageTwo, const 
 	ifs2.close();
 }
 void PBM::rotateLeft() {
-	//getRow, getColl,
-	PBM rotatedImage(this->filename.c_str(), this->colls, this->rows); // Creates a new image, given the old image parameters fliped
-	for (std::size_t i = 0, oldJ = this->getWidth() - 1; i < rotatedImage.getHeight() && oldJ >= 0; ++i, --oldJ)
-	{
-		for (std::size_t j = 0, oldI = 0; j < rotatedImage.getWidth() && oldI < this->getHeight(); ++j, ++oldI)
-		{
-			rotatedImage.setColor(i, j, this->getColor(oldI, oldJ));
-		}
-	}
-	*this = rotatedImage;
-}
-void PBM::rotateRight(){
 	
 }
+void PBM::rotateRight() {
 
+}
 
 
 
