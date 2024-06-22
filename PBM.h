@@ -10,6 +10,7 @@ class PBM : public Image {
 	Vector<bool> data;
 public:
 	PBM(void) = default;
+	Image* clone() const ;
 	void load(const char* filename) override;
 
 	void save() override;

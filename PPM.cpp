@@ -1,5 +1,8 @@
 #include "PPM.h"
-
+Image* PPM::clone() const
+{
+	return new PPM(*this);
+}
 bool PPM::isMonochrome()const
 {
 	

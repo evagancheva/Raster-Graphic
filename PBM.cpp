@@ -1,5 +1,10 @@
 #include "PBM.h"
 
+Image* PBM::clone() const
+{
+	return new PBM(*this);
+}
+
 void PBM::load(const char* fileName)
 {
 	this->filename = fileName;

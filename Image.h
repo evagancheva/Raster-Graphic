@@ -15,6 +15,7 @@ public:
 	Image(const char* filename) :filename(filename){}
 	Image(const char* filename, unsigned int rows , unsigned int colls );
 	virtual ~Image() = default;
+	virtual Image* clone() const = 0;
 
 	virtual void load(const char* filename) = 0;
 	

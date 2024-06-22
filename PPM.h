@@ -14,6 +14,7 @@ class PPM:public Image
 public:
 	
 	PPM(void) = default;
+	Image* clone() const;
 	void load(const char* filename) override;
 
 	void save() override;

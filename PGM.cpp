@@ -1,5 +1,10 @@
 #include "PGM.h"
 
+Image* PGM::clone() const
+{
+	return new PGM(*this);
+}
+
 void PGM::load(const char* fileName)
 {
 	this->filename = fileName;
