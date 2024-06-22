@@ -9,6 +9,7 @@ int main()
 {
     PPM pic;
     pic.load("1.ppm.txt");
+    pic.rotateLeft();
     pic.save();
 
 }

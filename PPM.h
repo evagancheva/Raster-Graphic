@@ -9,6 +9,8 @@
 class PPM:public Image
 {
 	Vector<Pixel> data;
+	bool isMonochrome()const;
+	bool isGrayscaled() const;
 public:
 	
 	PPM(void) = default;
@@ -22,7 +24,7 @@ public:
 	void grayscale()override;
 
 	Pixel getValueAtPosition(int row, int column);
-	void setValueAtPosition(int row, int column, Pixel value);
+	void setValueAtPosition(int row, int column, Pixel& value);
 
 	void makeHorizontalCollage(const char* imageOne, const char* imageTwo, const char* collageName);
 	void makeVerticalCollage(const char* imageOne, const char* imageTwo, const char* collageName);
