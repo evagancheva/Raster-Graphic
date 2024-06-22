@@ -1,10 +1,10 @@
-#include "GrayScaleComand.h"
+#include "RotateRightComand.h"
 
-GrayScaleComand::GrayScaleComand(Vector<Polymorphic_Ptr<Image>>& data):Comand(data)
+RotateRightComand::RotateRightComand(Vector<Polymorphic_Ptr<Image>>& data) :Comand(data)
 {
 }
 
-void GrayScaleComand::execute()
+void RotateRightComand::execute()
 {
     if (snapshot) {
         delete snapshot;
@@ -13,10 +13,10 @@ void GrayScaleComand::execute()
 
     for (unsigned i = 0; i < data.getSize(); i++)
     {
-        data[i]->grayscale();
+        data[i]->rotateRight();
     }
 }
-void GrayScaleComand::undo()
+void RotateRightComand::undo()
 {
     if (snapshot) {
         for (size_t i = 0; i < snapshot->getSize(); i++)
@@ -28,12 +28,12 @@ void GrayScaleComand::undo()
     snapshot = nullptr;
 }
 
-Comand* GrayScaleComand::clone() const
+Comand* RotateRightComand::clone() const
 {
-    return new GrayScaleComand(*this);
+    return new RotateRightComand(*this);
 }
 
-GrayScaleComand::~GrayScaleComand()
+RotateRightComand::~RotateRightComand()
 {
     if (!snapshot) {
         delete snapshot;

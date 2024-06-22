@@ -1,10 +1,11 @@
-#include "GrayScaleComand.h"
+#include "MonochromeComand.h"
 
-GrayScaleComand::GrayScaleComand(Vector<Polymorphic_Ptr<Image>>& data):Comand(data)
+
+MonochromeComand::MonochromeComand(Vector<Polymorphic_Ptr<Image>>& data) :Comand(data)
 {
 }
 
-void GrayScaleComand::execute()
+void MonochromeComand::execute()
 {
     if (snapshot) {
         delete snapshot;
@@ -13,10 +14,10 @@ void GrayScaleComand::execute()
 
     for (unsigned i = 0; i < data.getSize(); i++)
     {
-        data[i]->grayscale();
+        data[i]->makeMonochrome();
     }
 }
-void GrayScaleComand::undo()
+void MonochromeComand::undo()
 {
     if (snapshot) {
         for (size_t i = 0; i < snapshot->getSize(); i++)
@@ -28,12 +29,12 @@ void GrayScaleComand::undo()
     snapshot = nullptr;
 }
 
-Comand* GrayScaleComand::clone() const
+Comand* MonochromeComand::clone() const
 {
-    return new GrayScaleComand(*this);
+    return new MonochromeComand(*this);
 }
 
-GrayScaleComand::~GrayScaleComand()
+MonochromeComand::~MonochromeComand()
 {
     if (!snapshot) {
         delete snapshot;
