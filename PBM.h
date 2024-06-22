@@ -9,9 +9,6 @@ class PBM : public Image {
 
 	Vector<bool> data;
 public:
-	PBM(const char* fileName);
-	PBM(const char* fileName, const std::size_t newHeight, const std::size_t newWidth);
-	PBM(const PBM& other);
 	PBM(void) = default;
 	void load(const char* filename) override;
 

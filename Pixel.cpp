@@ -2,39 +2,39 @@
 
 Pixel::Pixel():r(0),g(0),b(0){}
 
-Pixel::Pixel(unsigned char r, unsigned char g, unsigned char b)
+Pixel::Pixel(int r, int g, int b)
 {
 	setR(r);
-	setG(r);
-	setB(r);
+	setG(g);
+	setB(b);
 }
 
-unsigned char Pixel::getR() const
+int Pixel::getR() const
 {
 	return r;
 }
-unsigned char Pixel::getG() const
+int Pixel::getG() const
 {
 	return g;
 }
-unsigned char Pixel::getB() const
+int Pixel::getB() const
 {
 	return b;
 }
 
-void Pixel::setR(unsigned char r)
+void Pixel::setR(int r)
 {
 	if (r < 0 || r>255)
 		return;
 	this->r = r;
 }
-void Pixel::setG(unsigned char g)
+void Pixel::setG(int g)
 {
 	if (g < 0 || g>255)
 		return;
 	this->g = g;
 }
-void Pixel::setB(unsigned char b)
+void Pixel::setB(int b)
 {
 	if (b < 0 || b>255)
 		return;

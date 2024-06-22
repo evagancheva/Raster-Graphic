@@ -17,23 +17,23 @@ void PGM::load(const char* fileName)
 	magicNumber = buff;
 	colls = _colls;
 	rows = _rows;
-	ifs >> colorMax;
+	ifs>>colorMax;
 
 	data.clear();
 
 	int num;
-	for (int i = 0; i < rows; i++) {
-		Vector<unsigned char> temp;
-		for (int i = 0; i < colls; i++) {
-			ifs >> num;
-			temp.pushBack(num);
-		}
-		data.pushBack(temp);
+	for (int i = 0; i < (colls * rows); i++) {
+		ifs >> num;
+		data.pushBack(num);
 	}
 	ifs.close();
-
 }
-
+int PGM::getValueAtPosition(int row, int coll) {
+	return data[(row * colls) + coll];
+}
+void PGM::setValueAtPosition(int row, int coll, int value) {
+	this->data[(row * colls) + coll] = value;
+}
 void PGM::save()
 {
 	std::ofstream save(filename.c_str(), std::ios::out);
@@ -42,7 +42,7 @@ void PGM::save()
 	save << colorMax << std::endl;
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < colls; j++) {
-			int value = data[i][j];
+			int value = getValueAtPosition(i, j);
 			save << value << " ";
 		}
 		save << std::endl;
@@ -57,7 +57,7 @@ void PGM::saveAs(const char* fileName)
 	save << colorMax << std::endl;
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < colls; j++) {
-			int value = data[i][j];
+			int value = getValueAtPosition(i, j);
 			save << value << " ";
 		}
 		save << std::endl;
@@ -66,26 +66,23 @@ void PGM::saveAs(const char* fileName)
 
 void PGM::makeMonochrome()
 {
-	for (int i = 0; i < rows; i++)
+	for (int i = 0; i < rows*colls; i++)
 	{
-		for (int j = 0; j < colls; j++) {
-			if (data[i][j] == 0) {
-				data[i][j] = 0;
+			if (data[i] == 0) {
+				data[i] = 0;
 			}
 			else
-				data[i][j] = colorMax;
-		}
+				data[i] = colorMax;
+		
 	}
 }
 
 void PGM::makeNegative()
 {
-	for (int i = 0; i < rows; i++)
+	for (int i = 0; i < rows*colls; i++)
 	{
-		for (int j = 0; j < colls; j++) {
-
-			data[i][j] = colorMax - data[i][j];
-		}
+			data[i] = (colorMax - data[i]);
+		
 	}
 }
 
@@ -129,21 +126,20 @@ void PGM::makeHorizontalCollage(const char* imageOne, const char* imageTwo, cons
 	colorMax1 = std::max(colorMax1, colorMax2);
 
 	data.clear();
-	
+
 	int num;
 	for (int i = 0; i < rows; i++) {
-
 		for (int j = 0; j < colls1; j++) {
 			if (rows1 >= i) {
 				ifs1 >> num;
-				data[i].pushBack(num);
+				data.pushBack(num);
 			}
-			else data[i].pushBack(0);
+			else data.pushBack(0);
 
 		}
 		for (int j = colls1; j < colls; j++) {
 			ifs2 >> num;
-			data[i].pushBack(num);
+			data.pushBack(num);
 		}
 
 	}
@@ -183,59 +179,56 @@ void PGM::makeVerticalCollage(const char* imageOne, const char* imageTwo, const 
 	else
 		colls = colls2;
 
-	colorMax = colorMax1;
+	colorMax = std::max(colorMax1,colorMax2);
 
 	data.clear();
 
 	int num;
-	for (int i = 0; i < rows1; i++) {
-		Vector<unsigned char> temp;
-		for (int j = 0; j < colls; j++) {
-			if (j <= colls1) {
-				ifs1 >> num;
-				temp.pushBack(num);
-			}
-			else
-				temp.pushBack(0);
-		}
-		data.pushBack(temp);
+	for (int j = 0; j < colls1 * rows1; j++) {
+		ifs1 >> num;
+		data.pushBack(num);
 	}
-	
-	for (int i = rows1; i < rows; i++) {
-		Vector<unsigned char> temp;
-		for (int j = 0; j < colls; j++) {
-			if (j <= colls2) {
-				ifs2 >> num;
-				temp.pushBack(num);
-			}
-			else
-				temp.pushBack(0);
-		}
-		data.pushBack(temp);
+	for (int j = colls1 * rows1; j < colls * rows; j++) {
+		ifs2 >> num;
+		data.pushBack(num);
 	}
-	
+
+
+
 	ifs1.close();
 	ifs2.close();
 }
 
-void PGM::rotateLeft()
-{
-	Vector<Vector<unsigned char>> temp;
-	for (int i = 0; i < colls; i++) {
-		Vector<unsigned char> temp2(rows);
-		temp.pushBack(temp2);
-	}
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < colls; j++) {
-			temp[j][i] = data[i][j];
+void PGM::rotateRight() {
+	// Create a new vector to store the rotated image data
+	Vector<unsigned char> newData(colls * rows);
+
+	for (int i = 0; i < rows; ++i) {
+		for (int j = 0; j < colls; ++j) {
+			newData[j * rows + (rows - i - 1)] = data[i * colls + j];
 		}
-		
 	}
+
+	// Swap rows and colls
 	std::swap(rows, colls);
 
-	data = temp;
+	// Replace the old data with the new data
+	data = std::move(newData);
 }
 
-void PGM::rotateRight()
-{
+void PGM::rotateLeft() {
+	// Create a new vector to store the rotated image data
+	Vector<unsigned char> newData(colls * rows);
+
+	for (int i = 0; i < rows; ++i) {
+		for (int j = 0; j < colls; ++j) {
+			newData[(colls - j - 1) * rows + i] = data[i * colls + j];
+		}
+	}
+
+	// Swap rows and colls
+	std::swap(rows, colls);
+
+	// Replace the old data with the new data
+	data = std::move(newData);
 }

@@ -1,14 +1,4 @@
 #include "PBM.h"
-PBM::PBM(const char* fileName) : Image(fileName)
-{
-
-}
-
-PBM::PBM(const char* fileName, size_t rows, const std::size_t colls)
-	: Image(fileName, rows, colls) {}
-
-PBM::PBM(const PBM& other)
-	: Image(other) {}
 
 void PBM::load(const char* fileName)
 {
@@ -106,15 +96,15 @@ void PBM::makeHorizontalCollage(const char* imageOne, const char* imageTwo, cons
 	}
 	char buff1[3];
 	char buff2[3];
-	int colls1, rows1, colorMax1, colls2, rows2, colorMax2;
+	int colls1, rows1, colls2, rows2;
 
 	ifs1 >> buff1;
 	ifs1 >> colls1 >> rows1;
-	ifs1 >> colorMax1;
+	
 
 	ifs2 >> buff2;
 	ifs2 >> colls2 >> rows2;
-	ifs2 >> colorMax2;
+	
 
 	magicNumber = buff1;
 	colls = colls1 + colls2;
@@ -124,7 +114,7 @@ void PBM::makeHorizontalCollage(const char* imageOne, const char* imageTwo, cons
 	else {
 		rows = rows2;
 	}
-	colorMax1 = std::max(colorMax1, colorMax2);
+	
 
 	data.clear();
 
@@ -161,15 +151,15 @@ void PBM::makeVerticalCollage(const char* imageOne, const char* imageTwo, const 
 	}
 	char buff1[3];
 	char buff2[3];
-	int colls1, rows1, colorMax1, colls2, rows2, colorMax2;
+	int colls1, rows1, colls2, rows2;
 
 	ifs1 >> buff1;
 	ifs1 >> colls1 >> rows1;
-	ifs1 >> colorMax1;
+	
 
 	ifs2 >> buff2;
 	ifs2 >> colls2 >> rows2;
-	ifs2 >> colorMax2;
+	
 
 	magicNumber = buff1;
 	rows = rows1 + rows2;
@@ -178,7 +168,6 @@ void PBM::makeVerticalCollage(const char* imageOne, const char* imageTwo, const 
 	else
 		colls = colls2;
 
-	colorMax = colorMax1;
 
 	data.clear();
 
@@ -197,11 +186,38 @@ void PBM::makeVerticalCollage(const char* imageOne, const char* imageTwo, const 
 	ifs1.close();
 	ifs2.close();
 }
-void PBM::rotateLeft() {
-	
-}
 void PBM::rotateRight() {
+	// Create a new vector to store the rotated image data
+	Vector<bool> newData(colls * rows);
 
+	for (int i = 0; i < rows; ++i) {
+		for (int j = 0; j < colls; ++j) {
+			newData[j * rows + (rows - i - 1)] = data[i * colls + j];
+		}
+	}
+
+	// Swap rows and colls
+	std::swap(rows, colls);
+
+	// Replace the old data with the new data
+	data = std::move(newData);
+}
+
+void PBM::rotateLeft() {
+	// Create a new vector to store the rotated image data
+	Vector<bool> newData(colls * rows);
+
+	for (int i = 0; i < rows; ++i) {
+		for (int j = 0; j < colls; ++j) {
+			newData[(colls - j - 1) * rows + i] = data[i * colls + j];
+		}
+	}
+
+	// Swap rows and colls
+	std::swap(rows, colls);
+
+	// Replace the old data with the new data
+	data = std::move(newData);
 }
 
 
