@@ -1,6 +1,6 @@
 #include "Image.h"
 
-Image::Image(const char* filename, const char* magicNumber, unsigned int rows, unsigned int colls, 
-			unsigned int _colorMax):filename(filename),magicNumber(magicNumber), colls(colls),rows(rows)
+Image::Image(const char* filename, unsigned int rows, unsigned int colls)
+	:filename(filename), colls(colls),rows(rows)
 {
 }

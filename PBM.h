@@ -6,12 +6,13 @@
 #include "Image.h"
 
 class PBM : public Image {
-	MyVector<bool> data;
 
+	Vector<bool> data;
 public:
-	PBM() = default;
-	PBM(const char* filename, const char* magicNumber, unsigned int rows, unsigned int cols, unsigned int colorMax);
-
+	PBM(const char* fileName);
+	PBM(const char* fileName, const std::size_t newHeight, const std::size_t newWidth);
+	PBM(const PBM& other);
+	PBM(void) = default;
 	void load(const char* filename) override;
 
 	void save() override;
@@ -24,7 +25,10 @@ public:
 	int getValueAtPosition(int row, int column);
 	void setValueAtPosition(int row, int column, int value);
 
-	void makeHorizontalCollage(const char*, const char*, const char*);
-	//void makeVerticalCollage(const char*, const char*, const char*);
+	void makeHorizontalCollage(const char* imageOne, const char* imageTwo, const char* collageName);
+	void makeVerticalCollage(const char* imageOne, const char* imageTwo, const char* collageName);
+	
+	void rotateLeft() override;
+	void rotateRight()override;
 };
 

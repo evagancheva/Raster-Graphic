@@ -12,7 +12,8 @@ protected:
 
 public:
 	Image() = default;
-	Image(const char* filename, const char* magicNumber , unsigned int rows , unsigned int colls , unsigned int _colorMax);
+	Image(const char* filename) :filename(filename){}
+	Image(const char* filename, unsigned int rows , unsigned int colls );
 	virtual ~Image() = default;
 
 	virtual void load(const char* filename) = 0;
@@ -25,8 +26,9 @@ public:
 	virtual void grayscale() = 0;
 
 	virtual void makeHorizontalCollage(const char*, const char*, const char*) = 0;
-	//virtual void makeVerticalCollage(const char*, const char*, const char*) = 0;
+	virtual void makeVerticalCollage(const char*, const char*, const char*) = 0;
 	
-	//getteri i setteri
+	virtual void rotateLeft() = 0;
+	virtual void rotateRight() = 0;
 };
 

@@ -1,7 +1,14 @@
 #include "PBM.h"
-PBM::PBM(const char* filename, const char* magicNumber, unsigned int rows, 
-    unsigned int cols, unsigned int colorMax)
-    : Image(filename, magicNumber, rows, cols, colorMax), data(rows* cols) {}
+PBM::PBM(const char* fileName):  Image(fileName)
+{
+	
+}
+
+PBM::PBM(const char* fileName, size_t rows, const std::size_t colls)
+	: Image(fileName,rows, colls) {}
+
+PBM::PBM(const PBM& other)
+	: Image(other) {}
 
 void PBM::load(const char* fileName)
 {
@@ -25,9 +32,9 @@ void PBM::load(const char* fileName)
 	data.clear();
 
 	int num;
-	for (int i = 0; i < colls * rows; i++) {
+	for (int i = 0; i < (colls * rows); i++) {
 		ifs >> num;
-		data.push_back(num);
+		data.pushBack(num);
 	}
 	ifs.close();
 
@@ -45,9 +52,9 @@ void PBM::save()
 	std::ofstream save(filename.c_str(), std::ios::out);
 	save << magicNumber << std::endl;
 	save << colls << " " << rows << std::endl;
-	for (int i = 0; i < colls; i++) {
-		for (int j = 0; j < rows; j++) {
-			int value = getValueAtPosition(j, i);
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < colls; j++) {
+			int value = getValueAtPosition(i, j);
 			save << value << " ";
 		}
 		save << std::endl;
@@ -76,10 +83,9 @@ void PBM::makeMonochrome()
 
 void PBM::makeNegative()
 {
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < colls; j++) {
-			setValueAtPosition(j, i, 1 - getValueAtPosition(j, i));
-		}
+	for (int i = 0; i < rows*colls; i++) {
+		int temp = data[i];
+		data[i] = 1 - temp;
 	}
 }
 
@@ -123,22 +129,18 @@ void PBM::makeHorizontalCollage(const char* imageOne, const char* imageTwo, cons
 	data.clear();
 
 	int num;
-	for (int i = 0; i <  rows; i++) {
+	for (int i = 0; i < colls * rows; i++) {
 		for (int j = 0; j < colls1; j++) {
-			if (rows1 <= i) {
+			if (rows1 >= i) {
 				ifs1 >> num;
-				data.push_back(num);
+				data.pushBack(num);
 			}
-			else data.push_back(0);
+			else data.pushBack(0);
 
 		}
-		for (int j = 0; j < colls2; j++) {
-			if (rows2 <= i) {
-				ifs2 >> num;
-				data.push_back(num);
-			}
-			else data.push_back(0);
-
+		for (int j = colls1; j < colls; j++) {
+			ifs2 >> num;
+			data.pushBack(num);
 		}
 
 	}
@@ -146,52 +148,71 @@ void PBM::makeHorizontalCollage(const char* imageOne, const char* imageTwo, cons
 	ifs1.close();
 	ifs2.close();
 }
-
-/*void PBM::makeVerticalCollage(const char* imageOne, const char* imageTwo, const char* collageName) {
-	imageName = new char[strlen(collageName) + 1];
-	for (int i = 0; i < strlen(collageName) + 1; i++) {
-		imageName[i] = collageName[i];
+void PBM::makeVerticalCollage(const char* imageOne, const char* imageTwo, const char* collageName) {
+	filename = collageName;
+	
+	std::ifstream ifs1(imageOne, std::ios::in);
+	if (!ifs1.is_open()) {
+		throw std::runtime_error("fail to open fail");
 	}
+	std::ifstream ifs2(imageTwo, std::ios::in);
+	if (!ifs2.is_open()) {
+		throw std::runtime_error("fail to open fail");
+	}
+	char buff1[3];
+	char buff2[3];
+	int colls1, rows1, colorMax1, colls2, rows2, colorMax2;
 
-	ifstream loadImageOne(imageOne, ios::in);
-	if (loadImageOne.fail()) { cout << "Error"; return; }
-	ifstream loadImageTwo(imageTwo, ios::in);
-	if (loadImageTwo.fail()) { cout << "Error"; return; }
+	ifs1 >> buff1;
+	ifs1 >> colls1 >> rows1;
+	ifs1 >> colorMax1;
 
-	string _magicNumOne, _magicNumTwo;
-	int _widthOne, _heightOne, _rangeOne, _widthTwo, _heightTwo, _rangeTwo;
+	ifs2 >> buff2;
+	ifs2 >> colls2 >> rows2;
+	ifs2 >> colorMax2;
 
-	loadImageOne >> _magicNumOne;
-	loadImageOne >> _widthOne >> _heightOne;
-	loadImageOne >> _rangeOne;
+	magicNumber = buff1;
+	rows = rows1 + rows2;
+	if (colls1 > colls2)
+		colls = colls1;
+	else 
+		colls = colls2;
 
-	loadImageTwo >> _magicNumTwo;
-	loadImageTwo >> _widthTwo >> _heightTwo;
-	loadImageTwo >> _rangeTwo;
+	colorMax = colorMax1;
 
-	magicNum = _magicNumOne;
-	height = _heightOne + _heightTwo;
-	if (_widthOne > _widthTwo) width = _widthOne;
-	else width = _widthTwo;
-	range = _rangeOne;
-
-	value.clear();
+	data.clear();
 
 	int num;
-	for (int j = 0; j < _widthOne * _heightOne; j++) {
-		loadImageOne >> num;
-		value.push_back(num);
+	for (int j = 0; j < colls1 * rows1; j++) {
+		ifs1 >> num;
+		data.pushBack(num);
 	}
-	for (int j = _widthOne * _heightOne; j < width * height; j++) {
-		loadImageTwo >> num;
-		value.push_back(num);
+	for (int j = colls1 * rows1; j < colls * rows; j++) {
+		ifs2 >> num;
+		data.pushBack(num);
 	}
 
 
 
-	loadImageOne.close();
-	loadImageTwo.close();
-}*/
+	ifs1.close();
+	ifs2.close();
+}
+void PBM::rotateLeft() {
+	//getRow, getColl,
+	PBM rotatedImage(this->filename.c_str(), this->colls, this->rows); // Creates a new image, given the old image parameters fliped
+	for (std::size_t i = 0, oldJ = this->getWidth() - 1; i < rotatedImage.getHeight() && oldJ >= 0; ++i, --oldJ)
+	{
+		for (std::size_t j = 0, oldI = 0; j < rotatedImage.getWidth() && oldI < this->getHeight(); ++j, ++oldI)
+		{
+			rotatedImage.setColor(i, j, this->getColor(oldI, oldJ));
+		}
+	}
+	*this = rotatedImage;
+}
+void PBM::rotateRight(){
+	
+}
+
 
 
 

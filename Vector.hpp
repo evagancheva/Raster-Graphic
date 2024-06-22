@@ -1,255 +1,279 @@
 #pragma once
+#pragma once
+#include <iostream>
+#include <exception>
+#include <stdexcept>
+#include <utility>
 
-template<typename  T>
-class MyVector {
-	T* data = nullptr;
-	size_t size = 0;
-	size_t capacity = 0;
+template <typename T>
+class Vector
+{
+    T* data;
+    size_t size;
+    size_t capacity;
 
-	void free();
-	void resize(size_t cap);
+    void free();
+    void copyFrom(const Vector<T>& other);
+    void moveFrom(Vector<T>&& other);
+    void resize(size_t newCapacity);
 
-	void copyFrom(const MyVector& other);
-	void moveFrom(MyVector&& other);
-
-	unsigned getNextPowerOfTwo(unsigned int n)
-	{
-		if (n == 0) return 1;
-
-		while (n & (n - 1))
-			n &= (n - 1);
-
-		return n << 1;
-	}
 public:
-	MyVector() = default;
-	MyVector(const T* arr, size_t size);
-	MyVector(size_t newSize);
+    Vector();
+    Vector(const Vector<T>& other);
+    Vector(Vector<T>&& other);
 
-	MyVector(const MyVector& other);
-	MyVector(MyVector&& other);
+    Vector<T>& operator=(const Vector<T>& other);
+    Vector<T>& operator=(Vector<T>&& other);
 
-	MyVector& operator=(const MyVector& other);
-	MyVector& operator=(MyVector&& other);
+    void pushBack(const T& element);
+    void pushBack(T&& element);
 
-	void push_bask(const T& el);
-	void push_back(T&& el);
-	void pop_back();
+    void popBack();
 
-	size_t getSize()const;
-	size_t getCap() const;
+    void insert(const T& element, size_t index);
+    void insert(T&& element, size_t index);
 
-	void insert(const T& el, size_t index);
-	void insert(T&& el, size_t index);
+    void erase(size_t index);
 
-	void erase(size_t index);
-	void clear();
+    void clear();
 
-	const T& operator[](size_t index) const;
-	T& operator[](size_t index);
+    const T& operator[](size_t index) const;
+    T& operator[](size_t index);
 
-	bool isEmpty()const;
+    bool isEmpty() const;
+    size_t getSize() const;
+
+    ~Vector();
 };
 
-template<typename T>
-void MyVector<T>::free()
+template <typename T>
+void Vector<T>::free()
 {
-	delete[]data;
-	data = nullptr;
-	size = capacity = 0;
+    delete[] data;
+    data = nullptr;
 }
 
-template<typename T>
-void MyVector<T>::resize(size_t cap)
+template <typename T>
+void Vector<T>::copyFrom(const Vector<T>& other)
 {
-	T* newData = new T[cap];
-	for (size_t i = 0; i < getSize(); i++)
-	{
-		newData[i] = this->data[i];
-	}
-
-	delete[] this->data;
-	this->data = newData;
-	this->capacity = cap;
+    size = other.size;
+    capacity = other.capacity;
+    data = new T[capacity];
+    for (size_t i = 0; i < size; i++)
+    {
+        data[i] = other.data[i];
+    }
 }
 
-template<typename T>
-void MyVector<T>::copyFrom(const MyVector<T>& other)
+template <typename T>
+void Vector<T>::moveFrom(Vector<T>&& other)
 {
-	size = other.size;
-	capacity = other.capacity;
+    size = other.size;
+    capacity = other.capacity;
+    data = other.data;
 
-	data = new T[capacity];
-	for (size_t i = 0; i < size; i++) {
-		data[i] = other.data[i];
-	}
-
+    other.data = nullptr;
 }
 
-template<typename T>
-void MyVector<T>::moveFrom(MyVector<T>&& other)
+template <typename T>
+void Vector<T>::resize(size_t newCapacity)
 {
-	data = other.data;
-	other.data = nullptr;
+    T* newData = new T[newCapacity];
 
-	capacity = other.capacity;
-	other.capacity = 0;
+    for (size_t i = 0; i < size; i++)
+    {
+        newData[i] = std::move(data[i]);
+    }
 
-	size = other.size;
-	other.size = 0;
+    delete[] data;
+    data = newData;
+    capacity = newCapacity;
 }
 
-template<typename T>
-MyVector<T>::MyVector(const T* arr, size_t size)
+template <typename T>
+Vector<T>::Vector()
 {
-	capacity = getNextPowerOfTwo(size);
-	this->size = size;
+    capacity = 8;
+    size = 0;
 
-	data = new T[capacity];
-	for (size_t i = 0; i < size; i++) {
-		data[i] = arr[i];
-	}
+    data = new T[capacity];
 }
 
-template<typename T>
-MyVector<T>::MyVector(size_t newSize)
+template <typename T>
+Vector<T>::Vector(const Vector<T>& other)
 {
-	this->capacity = getNextPowerOfTwo(newSize);
-	this->data = new T[this->capacity];
-	size = newSize;
+    copyFrom(other);
 }
 
-template<typename T>
-MyVector<T>::MyVector(const MyVector<T>& other)
+template <typename T>
+Vector<T>::Vector(Vector<T>&& other)
 {
-	copyFrom(other);
+    moveFrom(std::move(other));
 }
 
-template<typename T>
-MyVector<T>::MyVector(MyVector<T>&& other)
+template <typename T>
+Vector<T>& Vector<T>::operator=(const Vector<T>& other)
 {
-	moveFrom(std::move(other));
+    if (this != &other)
+    {
+        free();
+        copyFrom(other);
+    }
+
+    return *this;
 }
 
-template<typename T>
-MyVector<T>& MyVector<T>::operator=(const MyVector<T>& other)
+template <typename T>
+Vector<T>& Vector<T>::operator=(Vector<T>&& other)
 {
-	if (this != &other) {
-		free();
-		copyFrom(other);
-	}
-	return *this;
+    if (this != &other)
+    {
+        free();
+        moveFrom(std::move(other));
+    }
+
+    return *this;
 }
 
-template<typename T>
-MyVector<T>& MyVector<T>::operator=(MyVector<T>&& other)
+template <typename T>
+void Vector<T>::pushBack(const T& element)
 {
-	if (this != &other) {
-		free();
-		moveFrom(std::move(other));
-	}
-	return *this;
+    if (size == capacity)
+    {
+        resize(capacity * 2);
+    }
+
+    data[size++] = element;
 }
 
-template<typename T>
-void MyVector<T>::push_bask(const T& el)
+template <typename T>
+void Vector<T>::pushBack(T&& element)
 {
-	if (size >= capacity) {
-		resize(capacity * 2);
-	}
+    if (size == capacity)
+    {
+        resize(capacity * 2);
+    }
 
-	data[size] = el;
-	size++;
+    data[size++] = std::move(element);
 }
 
-template<typename T>
-void MyVector<T>::push_back(T&& el)
+template <typename T>
+void Vector<T>::popBack()
 {
-	if (size >= capacity) {
-		resize(capacity * 2);
-	}
-	data[size] = el;
-	size++;
+    if (isEmpty())
+    {
+        throw std::runtime_error("Cannot remove element from empty vector!");
+    }
+
+    if (size * 4 == capacity)
+    {
+        resize(capacity / 2);
+    }
+
+    size--;
 }
 
-template<typename T>
-inline void MyVector<T>::pop_back()
+template <typename T>
+void Vector<T>::insert(const T& element, size_t index)
 {
-	if (getSize() >= 0) {
-		size--;
-	}
-	if ((getSize() * 4) <= getCap())
-	{
-		resize(getCap() / 2);
-	}
+    if (index >= size)
+    {
+        throw std::runtime_error("Cannot insert element at non-existing index!");
+    }
 
+    if (size == capacity)
+    {
+        resize(2 * capacity);
+    }
+
+    for (size_t i = size; i > index; i--)
+    {
+        data[i] = std::move(data[i - 1]);
+    }
+
+    data[index] = element;
+    size++;
 }
 
-template<typename T>
-size_t MyVector<T>::getSize() const
+template <typename T>
+void Vector<T>::insert(T&& element, size_t index)
 {
-	return size;
+    if (index >= size)
+    {
+        throw std::runtime_error("Cannot insert element at non-existing index!");
+    }
+
+    if (size == capacity)
+    {
+        resize(2 * capacity);
+    }
+
+    for (size_t i = size; i > index; i--)
+    {
+        data[i] = std::move(data[i - 1]);
+    }
+
+    data[index] = std::move(element);
+    size++;
 }
 
-template<typename T>
-size_t MyVector<T>::getCap() const
+
+template <typename T>
+void Vector<T>::erase(size_t index)
 {
-	return capacity;
+    if (index >= size)
+    {
+        throw std::runtime_error("Cannot erase element at non-existing index!");
+    }
+
+    if (size * 4 == capacity)
+    {
+        resize(capacity / 2);
+    }
+
+    size--;
+
+    for (size_t i = index; i < size; i++)
+    {
+        data[i] = std::move(data[i + 1]);
+    }
 }
 
-template<typename T>
-void MyVector<T>::insert(const T& el, size_t index)
+template <typename T>
+void Vector<T>::clear()
 {
-	if (index >= getSize())
-		return;
-
-	data[index] = el;
+    free();
+    size = 0;
+    capacity = 8;
+    data = new T[capacity];
 }
 
-template<typename T>
-void MyVector<T>::insert(T&& el, size_t index)
+template <typename T>
+const T& Vector<T>::operator[](size_t index) const
 {
-	if (index >= getSize())
-		return;
-
-	data[index] = el;
+    return data[index];
 }
 
-template<typename T>
-void MyVector<T>::erase(size_t index)
+template <typename T>
+T& Vector<T>::operator[](size_t index)
 {
-	if (index >= getSize() || getSize() <= 0) {
-		return;
-	}
-	for (size_t i = index; i < getSize() - 1; i++)
-	{
-		this->data[i] = this->data[i + 1];
-	}
-	size--;
+    return data[index];
 }
 
-template<typename T>
-void MyVector<T>::clear()
+template <typename T>
+Vector<T>::~Vector()
 {
-	for (int i = 0; i < getSize(); i++) {
-		data[i] = T();
-	}
+    free();
 }
 
-template<typename T>
-const T& MyVector<T>::operator[](size_t index) const
+template <typename T>
+bool Vector<T>::isEmpty() const
 {
-	return data[index];
+    return size == 0;
 }
 
-template<typename T>
-T& MyVector<T>::operator[](size_t index)
+template <typename T>
+size_t Vector<T>::getSize() const
 {
-	return data[index];
-}
-
-template<typename T>
-bool MyVector<T>::isEmpty() const
-{
-	return getSize() == 0;
+    return size;
 }
