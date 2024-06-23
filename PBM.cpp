@@ -40,7 +40,7 @@ void PBM::load(const char* fileName)
 
 }
 
-int PBM::getValueAtPosition(int row, int coll) {
+int PBM::getValueAtPosition(int row, int coll) const{
 	return data[(row * colls) + coll];
 }
 void PBM::setValueAtPosition(int row, int coll, int value) {

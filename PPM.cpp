@@ -122,7 +122,7 @@ void PPM::grayscale()
 	}
 }
 
-Pixel PPM::getValueAtPosition(int row, int coll) {
+Pixel PPM::getValueAtPosition(int row, int coll)const {
 	return data[(row * colls) + coll];
 }
 void PPM::setValueAtPosition(int row, int coll, Pixel& value) {

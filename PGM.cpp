@@ -38,7 +38,7 @@ void PGM::load(const char* fileName)
 	}
 	ifs.close();
 }
-int PGM::getValueAtPosition(int row, int coll) {
+int PGM::getValueAtPosition(int row, int coll) const {
 	return data[(row * colls) + coll];
 }
 void PGM::setValueAtPosition(int row, int coll, int value) {

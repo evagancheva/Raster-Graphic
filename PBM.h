@@ -21,7 +21,7 @@ public:
 	void makeNegative()override;
 	void grayscale()override;
 
-	int getValueAtPosition(int row, int column);
+	int getValueAtPosition(int row, int column) const;
 	void setValueAtPosition(int row, int column, int value);
 
 	void makeHorizontalCollage(const char* imageOne, const char* imageTwo, const char* collageName);
