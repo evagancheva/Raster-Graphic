@@ -40,7 +40,7 @@ void Session::executeCommand(const MyString& command) {
     else if (command == "rotate right") {
         command_executor.add(new RotateRightComand(images));
     }
-    command_executor.execute();
+   // command_executor.execute();
 }
 
 void Session::undo() {

@@ -2,6 +2,7 @@
 
 PBM::PBM(const char* filename):Image(filename)
 {
+	load(filename);
 }
 
 Image* PBM::clone() const

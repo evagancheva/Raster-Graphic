@@ -99,6 +99,7 @@ bool PPM::isGrayscaled()const {
 
 PPM::PPM(const char* filename):Image(filename)
 {
+	load(filename);
 }
 
 

@@ -78,7 +78,8 @@ void Console::processCommand(const MyString& command) {
         collage(direction, im1, im2, outim);
     }
     else if (isPrefix("grayscale", buff) || isPrefix("monochrome", buff) ||
-             isPrefix("negative", buff) || isPrefix("rotate", buff)) {
+             isPrefix("negative", buff) || isPrefix("rotate", buff)) 
+    {
         executeCommand(command);
     }
 }
@@ -145,6 +146,7 @@ void Console::collage(const MyString& direction, const MyString& image1, const M
 void Console::saveSession() {
     if (currentSessionIndex != -1) {
         sessions[currentSessionIndex].save();
+        std::cout << "Save done" << std::endl;
     }
     else {
         std::cout << "No active session" << std::endl;
@@ -154,6 +156,7 @@ void Console::saveSession() {
 void Console::saveAs(const MyString& filename) {
     if (currentSessionIndex != -1) {
         sessions[currentSessionIndex].saveAs(filename.c_str());
+        std::cout << "Save done" << std::endl;
     }
     else {
         std::cout << "No active session" << std::endl;
@@ -167,6 +170,7 @@ void Console::saveAll()
        std::cout << "All active sessions saved"  << std::endl;
         
     }
+
     
 }
 

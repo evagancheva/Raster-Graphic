@@ -2,6 +2,7 @@
 
 PGM::PGM(const char* filename):Image(filename)
 {
+	load(filename);
 }
 
 Image* PGM::clone() const
