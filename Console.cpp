@@ -16,6 +16,7 @@ bool isPrefix(const char* pattern, const char* text)
 }
 
 void Console::run() {
+    helpCommand();
    char buff[1024]="\0";
     while (strcmp(buff,"exit")!=0) {
         std::cin.getline(buff, 1024, '\n');
@@ -23,12 +24,34 @@ void Console::run() {
     }
 }
 
+void Console::helpCommand() const
+{
+    std::cout <<"You need to type all comands exactly as in menu with spaces between "<<std::endl<<
+                "comand and filename, and also let each new comand be written on a "<<std::endl
+              <<"new line with enter All possible commands are : "<<std::endl
+              << "load <filename1> <filename2>...----> create new Session"<<std::endl
+              << "add <filename> ----> adds image to current session" << std::endl
+              << "session info ----> gives information on current session" << std::endl
+              << "switch <id> ----> switches to another session" << std::endl
+              << "save ----> saves changes in the file" << std::endl
+              << "save as <filename> ----> saves changes in new file" << std::endl
+              << "save all  ----> saves changes from all sessions" << std::endl
+              << "monochrome ----> does monochrome on current session of images" << std::endl
+              << "grayscale ----> does grayscale on current session of images" << std::endl
+              << "negative ----> does negative on current session of images" << std::endl
+              << "rotate left ----> rotates left all images on current session" << std::endl
+              << "rotate right ----> rotates right all images on current session" << std::endl
+              << "undo ----> undoes last change on current session" << std::endl
+              <<"colage <direction(horizontal/vertical)> <filename1> <filename2> <outfileName> ----> make colage of two pictures"<<std::endl
+              << "exit ----> end program"<<std::endl;
+}
+
 void Console::processCommand(const MyString& command) {
     
     std::stringstream ss (command.c_str());
     char buff[1024];
     ss >> buff;
-    if (isPrefix("load",buff)){
+    if (isPrefix("load", buff)) {
         Vector<MyString> filenames;
         while (!ss.eof()) {
             ss >> buff;
@@ -45,7 +68,7 @@ void Console::processCommand(const MyString& command) {
         MyString filename;
         ss >> buff;
         if (isPrefix("as", buff)) {
-            ss>>filename;
+            ss >> filename;
             saveAs(filename);
         }
         else if (isPrefix("all", buff)) {
@@ -78,10 +101,18 @@ void Console::processCommand(const MyString& command) {
         collage(direction, im1, im2, outim);
     }
     else if (isPrefix("grayscale", buff) || isPrefix("monochrome", buff) ||
-             isPrefix("negative", buff) || isPrefix("rotate", buff)) 
+        isPrefix("negative", buff) || isPrefix("rotate", buff))
     {
         executeCommand(command);
     }
+    else if (isPrefix("help", buff)) {
+        helpCommand();
+    }
+    else if (isPrefix("exit", buff)) {
+        return;
+    }
+    else
+        std::cout << "Invalid command" << std::endl;
 }
 
 void Console::loadSession(const Vector<MyString>& filenames) {

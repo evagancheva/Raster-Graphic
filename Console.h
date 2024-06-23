@@ -10,6 +10,7 @@ class Console {
    
 public:
     void run();
+    void helpCommand()const;
     void processCommand(const MyString& command);
     void loadSession(const Vector<MyString>& filenames);
     void switchSession(int id);
@@ -22,5 +23,3 @@ public:
     void saveAll();
     void printSessionInfo() const;
 };
-//need to make help function that print all comands
-//close Session

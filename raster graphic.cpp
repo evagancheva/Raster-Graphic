@@ -9,8 +9,15 @@
 
 int main()
 {
-    Console con;
-    con.run();
-
+    try {
+        Console con;
+        con.run();
+    }
+    catch (std::invalid_argument) {
+        std::cout << "Invalid argument (probably invalid file format)";
+    }
+    catch (...) {
+        std::cout << "Something go wrong";
+    }
     
 }

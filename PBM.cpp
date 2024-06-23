@@ -197,7 +197,7 @@ void PBM::makeVerticalCollage(const char* imageOne, const char* imageTwo, const 
 	ifs2.close();
 }
 void PBM::rotateRight() {
-	// Create a new vector to store the rotated image data
+	
 	Vector<bool> newData(colls * rows);
 
 	for (int i = 0; i < rows; ++i) {
@@ -206,15 +206,13 @@ void PBM::rotateRight() {
 		}
 	}
 
-	// Swap rows and colls
+	
 	std::swap(rows, colls);
-
-	// Replace the old data with the new data
 	data = std::move(newData);
 }
 
 void PBM::rotateLeft() {
-	// Create a new vector to store the rotated image data
+	
 	Vector<bool> newData(colls * rows);
 
 	for (int i = 0; i < rows; ++i) {
@@ -223,10 +221,8 @@ void PBM::rotateLeft() {
 		}
 	}
 
-	// Swap rows and colls
+	
 	std::swap(rows, colls);
-
-	// Replace the old data with the new data
 	data = std::move(newData);
 }
 

@@ -8,13 +8,13 @@ Polymorphic_Ptr<Image> ImageFactory::loadImage(const char* filename) const {
     MyString buff;
     file >> buff;
 
-    if (buff == "P1" || buff == "P4") {
+    if (buff == "P1") {
         return new PBM(filename);
     }
-    else if (buff == "P2" || buff == "P5") {
+    else if (buff == "P2" ) {
         return new PGM(filename);
     }
-    else if (buff == "P3" || buff == "P6") {
+    else if (buff == "P3" ) {
         return new PPM(filename);
     }
     else {

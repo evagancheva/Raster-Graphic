@@ -210,7 +210,7 @@ void PGM::makeVerticalCollage(const char* imageOne, const char* imageTwo, const 
 }
 
 void PGM::rotateRight() {
-	// Create a new vector to store the rotated image data
+	
 	Vector<unsigned char> newData(colls * rows);
 
 	for (int i = 0; i < rows; ++i) {
@@ -219,15 +219,13 @@ void PGM::rotateRight() {
 		}
 	}
 
-	// Swap rows and colls
+	
 	std::swap(rows, colls);
-
-	// Replace the old data with the new data
 	data = std::move(newData);
 }
 
 void PGM::rotateLeft() {
-	// Create a new vector to store the rotated image data
+	
 	Vector<unsigned char> newData(colls * rows);
 
 	for (int i = 0; i < rows; ++i) {
@@ -236,9 +234,7 @@ void PGM::rotateLeft() {
 		}
 	}
 
-	// Swap rows and colls
+	
 	std::swap(rows, colls);
-
-	// Replace the old data with the new data
 	data = std::move(newData);
 }

@@ -240,7 +240,7 @@ void PPM::makeVerticalCollage(const char* imageOne, const char* imageTwo, const 
 
 
 void PPM::rotateRight() {
-	// Create a new vector to store the rotated image data
+	
 	Vector<Pixel> newData(colls * rows);
 
 	for (int i = 0; i < rows; ++i) {
