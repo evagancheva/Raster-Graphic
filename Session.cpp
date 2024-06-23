@@ -53,7 +53,7 @@ void Session::collage(const MyString& direction, const MyString& image1, const M
     Polymorphic_Ptr<Image> img2(factory.loadImage(image2.c_str()));
 
     if (direction == "horizontal") {
-        // Assuming createHorizontalCollage and createVerticalCollage are virtual functions in the Image class
+        
         Polymorphic_Ptr<Image> result;
         (*result) .makeHorizontalCollage(image1.c_str(), image2.c_str(), outimage.c_str());
         images.pushBack(result);
@@ -66,13 +66,15 @@ void Session::collage(const MyString& direction, const MyString& image1, const M
 }
 
 void Session::save() {
+    command_executor.executeAll();
     for (size_t i = 0; i < images.getSize(); ++i) {
-
+        
         images[i]->save();
     }
 }
 
 void Session::saveAs(const MyString& filename) {
+    command_executor.executeAll();
     for (size_t i = 0; i < images.getSize(); ++i) {
        
         images[i]->saveAs(filename.c_str());
@@ -80,6 +82,7 @@ void Session::saveAs(const MyString& filename) {
 }
 
 void Session::printInfo() const {
+
     std::cout << "Session ID: " << session_id << "\n";
     std::cout << "Number of images: " << images.getSize() << "\n";
     for (size_t i = 0; i < images.getSize(); ++i) {

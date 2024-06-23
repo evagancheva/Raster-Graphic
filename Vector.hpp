@@ -8,7 +8,7 @@
 template <typename T>
 class Vector
 {
-    T* data;
+    T* data=nullptr;
     size_t size;
     size_t capacity;
 

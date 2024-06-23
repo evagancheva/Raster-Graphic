@@ -5,13 +5,12 @@
 #include"PGM.h"
 #include"PPM.h"
 #include"Session.h"
+#include "Console.h"
 
 int main()
 {
-    PPM pic;
-    pic.load("1.ppm.txt");
-    pic.rotateLeft();
-    pic.save();
-    Session s(1);
+    Console con;
+    con.run();
+
     
 }

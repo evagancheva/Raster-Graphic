@@ -11,15 +11,11 @@ class CommandExecutor
 	MyStack< Polymorphic_Ptr<Comand>, 64> history;
 
 public:
-	CommandExecutor() = default;
-	~CommandExecutor() = default;
 
 	void add(Comand* c);
 	void execute();
 	void executeAll();
 	void undo();
 
-	CommandExecutor(const CommandExecutor&) = delete;
-	CommandExecutor& operator=(const CommandExecutor&) = delete;
 };
 

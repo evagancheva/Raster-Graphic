@@ -6,12 +6,13 @@
 class Session
 {
 private:
-    int session_id;
+    int session_id=0;
     Vector<Polymorphic_Ptr<Image>> images;
     CommandExecutor command_executor;
 
 public:
-    Session(int id) : session_id(id),command_executor() {}
+    Session() :session_id(0) {}
+    Session(int id);
 
     void addImage(const Polymorphic_Ptr<Image>& image);
     void loadImage(const MyString& filename);
@@ -23,4 +24,5 @@ public:
 
     void printInfo() const;
     int getID() const;
+
 };
