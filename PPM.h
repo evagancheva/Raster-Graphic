@@ -13,7 +13,7 @@ class PPM:public Image
 	bool isGrayscaled() const;
 public:
 	PPM(const char* filename);
-	PPM(void) = default;
+	PPM() = default;
 	Image* clone() const;
 	void load(const char* filename) override;
 

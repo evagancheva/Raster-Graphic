@@ -10,7 +10,7 @@ class PGM : public Image {
 
 public:
 	PGM(const char* filename);
-	PGM(void) = default;
+	PGM() = default;
 	Image* clone() const;
 	void load(const char* filename) override;
 
